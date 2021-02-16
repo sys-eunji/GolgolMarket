@@ -1,0 +1,165 @@
+--sys계정에서 golgol계정 생성
+ALTER SESSION SET "_ORACLE_SCRIPT"=TRUE;
+ CREATE USER golgol IDENTIFIED BY golgol;
+  ALTER USER golgol DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
+  GRANT CONNECT, resource TO golgol;
+  GRANT CREATE VIEW TO golgol;
+  GRANT CREATE SEQUENCE TO golgol;
+  
+--<<golgol계정에서 테이블 생성>>
+
+/* 멤버 */
+CREATE TABLE GOLGOL.Member (
+	id VARCHAR2(10) NOT NULL, /* 아이디 */
+	nickname VARCHAR2(15) NOT NULL, /* 닉네임 */
+	pwd VARCHAR2(15) NOT NULL /* 비밀번호 */
+);
+
+COMMENT ON TABLE GOLGOL.Member IS '멤버';
+
+COMMENT ON COLUMN GOLGOL.Member.id IS '아이디';
+
+COMMENT ON COLUMN GOLGOL.Member.nickname IS '닉네임';
+
+COMMENT ON COLUMN GOLGOL.Member.pwd IS '비밀번호';
+
+CREATE UNIQUE INDEX GOLGOL.PK_Member
+	ON GOLGOL.Member (
+		id ASC
+	);
+
+ALTER TABLE GOLGOL.Member
+	ADD
+		CONSTRAINT PK_Member
+		PRIMARY KEY (
+			id
+		);
+
+/* 거래 */
+CREATE TABLE GOLGOL.Transaction (
+	t_idx NUMBER(5) NOT NULL, /* 번호 */
+	id VARCHAR2(10) NOT NULL, /* 아이디 */
+	t_title VARCHAR2(50) NOT NULL, /* 제목 */
+	t_content VARCHAR2(4000) NOT NULL, /* 내용 */
+	t_count NUMBER(5) NOT NULL, /* 조회수 */
+	t_date DATE NOT NULL, /* 작성일 */
+	s_idx NUMBER(1) NOT NULL /* 일련번호 */
+);
+
+COMMENT ON TABLE GOLGOL.Transaction IS '거래';
+
+COMMENT ON COLUMN GOLGOL.Transaction.t_idx IS '번호';
+
+COMMENT ON COLUMN GOLGOL.Transaction.id IS '아이디';
+
+COMMENT ON COLUMN GOLGOL.Transaction.t_title IS '제목';
+
+COMMENT ON COLUMN GOLGOL.Transaction.t_content IS '내용';
+
+COMMENT ON COLUMN GOLGOL.Transaction.t_count IS '조회수';
+
+COMMENT ON COLUMN GOLGOL.Transaction.t_date IS '작성일';
+
+COMMENT ON COLUMN GOLGOL.Transaction.s_idx IS '일련번호';
+
+CREATE UNIQUE INDEX GOLGOL.PK_Transaction
+	ON GOLGOL.Transaction (
+		t_idx ASC
+	);
+
+ALTER TABLE GOLGOL.Transaction
+	ADD
+		CONSTRAINT PK_Transaction
+		PRIMARY KEY (
+			t_idx
+		);
+
+/* 커뮤니티 */
+CREATE TABLE GOLGOL.Community (
+	c_idx NUMBER(5) NOT NULL, /* 번호 */
+	id VARCHAR2(10) NOT NULL, /* 아이디 */
+	c_title VARCHAR2(50) NOT NULL, /* 제목 */
+	c_content VARCHAR2(4000) NOT NULL, /* 내용 */
+	c_count VARCHAR2(5) NOT NULL, /* 조회수 */
+	c_date DATE NOT NULL /* 작성일 */
+);
+
+COMMENT ON TABLE GOLGOL.Community IS '커뮤니티';
+
+COMMENT ON COLUMN GOLGOL.Community.c_idx IS '번호';
+
+COMMENT ON COLUMN GOLGOL.Community.id IS '아이디';
+
+COMMENT ON COLUMN GOLGOL.Community.c_title IS '제목';
+
+COMMENT ON COLUMN GOLGOL.Community.c_content IS '내용';
+
+COMMENT ON COLUMN GOLGOL.Community.c_count IS '조회수';
+
+COMMENT ON COLUMN GOLGOL.Community.c_date IS '작성일';
+
+CREATE UNIQUE INDEX GOLGOL.PK_Community
+	ON GOLGOL.Community (
+		c_idx ASC
+	);
+
+ALTER TABLE GOLGOL.Community
+	ADD
+		CONSTRAINT PK_Community
+		PRIMARY KEY (
+			c_idx
+		);
+
+/* 상태 */
+CREATE TABLE GOLGOL.state (
+	s_idx NUMBER(1) NOT NULL, /* 일련번호 */
+	state VARCHAR2(12) NOT NULL /* 거래상태 */
+);
+
+COMMENT ON TABLE GOLGOL.state IS '상태';
+
+COMMENT ON COLUMN GOLGOL.state.s_idx IS '일련번호';
+
+COMMENT ON COLUMN GOLGOL.state.state IS '거래상태';
+
+CREATE UNIQUE INDEX GOLGOL.PK_state
+	ON GOLGOL.state (
+		s_idx ASC
+	);
+
+ALTER TABLE GOLGOL.state
+	ADD
+		CONSTRAINT PK_state
+		PRIMARY KEY (
+			s_idx
+		);
+
+ALTER TABLE GOLGOL.Transaction
+	ADD
+		CONSTRAINT FK_Member_TO_Transaction
+		FOREIGN KEY (
+			id
+		)
+		REFERENCES GOLGOL.Member (
+			id
+		);
+
+ALTER TABLE GOLGOL.Transaction
+	ADD
+		CONSTRAINT FK_state_TO_Transaction
+		FOREIGN KEY (
+			s_idx
+		)
+		REFERENCES GOLGOL.state (
+			s_idx
+		);
+
+ALTER TABLE GOLGOL.Community
+	ADD
+		CONSTRAINT FK_Member_TO_Community
+		FOREIGN KEY (
+			id
+		)
+		REFERENCES GOLGOL.Member (
+			id
+		);
