@@ -4,9 +4,9 @@
 		"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.example.vo.MemberVO" alias="memberVO" />
-		<typeAlias type="com.example.vo.TransactionVO" alias="transactionVO" />
-		<typeAlias type="com.example.vo.CommunityVO" alias="communityVO" />
-		<typeAlias type="com.example.vo.StateVO" alias="stateVO" />
+		<typeAlias type="com.golgol.vo.MemberVO" alias="memberVO" />
+		<typeAlias type="com.golgol.vo.TransactionVO" alias="transactionVO" />
+		<typeAlias type="com.golgol.vo.CommunityVO" alias="communityVO" />
+		<typeAlias type="com.golgol.vo.StateVO" alias="stateVO" />
 	</typeAliases>
 </configuration>
